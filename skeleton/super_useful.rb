@@ -1,6 +1,16 @@
 # PHASE 2
 def convert_to_int(str)
-  Integer(str)
+  begin
+    Integer(str)
+  rescue ArgumentError => e
+    puts "#{e.message}"
+    return nil
+  rescue TypeError => exception
+    puts "#{exception.message}"
+    return nil
+  end
+
+  
 end
 
 # PHASE 3
@@ -19,8 +29,18 @@ def feed_me_a_fruit
 
   puts "Feed me a fruit! (Enter the name of a fruit:)"
   maybe_fruit = gets.chomp
-  reaction(maybe_fruit) 
-end  
+
+  begin 
+    reaction(maybe_fruit) 
+  rescue StandardError => e
+    if maybe_fruit == "coffee"
+      retry
+    else 
+      puts "#{e.message}"
+    end
+  end  
+  end
+
 
 # PHASE 4
 class BestFriend
@@ -28,6 +48,11 @@ class BestFriend
     @name = name
     @yrs_known = yrs_known
     @fav_pastime = fav_pastime
+    if name.length == 0 || fav_pastime.length == 0
+      raise "arguments not given"
+    end
+    raise "Years known less than 5" if @yrs_known < 5
+    
   end
 
   def talk_about_friendship
